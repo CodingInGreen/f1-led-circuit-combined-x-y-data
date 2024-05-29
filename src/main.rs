@@ -8,6 +8,7 @@ use std::collections::HashMap;
 struct Timestamp {
     x: f64,
     y: f64,
+    z: f64,  // Added z column
     date: String,
     designator: String,
 }
@@ -23,6 +24,7 @@ struct LedCoord {
 struct Combined {
     x: f64,
     y: f64,
+    z: f64,  // Added z column to Combined struct
     date: String,
     designator: String,
     x_led: f64,
@@ -51,7 +53,7 @@ fn write_csv<T: Serialize>(file_path: &str, records: &[T]) -> Result<(), Box<dyn
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let timestamps: Vec<Timestamp> = read_csv("timestamps.csv")?;
+    let timestamps: Vec<Timestamp> = read_csv("led_designator_labeled_zandvoort_data_verstappen.csv")?;
     let led_coords: Vec<LedCoord> = read_csv("led_coords.csv")?;
     
     let mut led_map = HashMap::new();
@@ -65,6 +67,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             combined_data.push(Combined {
                 x: record.x,
                 y: record.y,
+                z: record.z,  // Including z column in the Combined struct
                 date: record.date.clone(),
                 designator: record.designator.clone(),
                 x_led,
@@ -73,7 +76,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    write_csv("combined-x-y.csv", &combined_data)?;
+    write_csv("combined-x-y-verstappen.csv", &combined_data)?;
 
     Ok(())
 }
